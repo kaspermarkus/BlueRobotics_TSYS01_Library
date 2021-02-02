@@ -1,9 +1,9 @@
 /* Blue Robotics Arduino TSYS01 Temperature Sensor Library
 ------------------------------------------------------------
- 
+
 Title: Blue Robotics Arduino TSYS01 Temperature Sensor Library
 Description: This library provides utilities to communicate with and to
-read data from the Measurement Specialties TSYS01 temperature 
+read data from the Measurement Specialties TSYS01 temperature
 sensor.
 Authors: Rustom Jehangir, Blue Robotics Inc.
 		 Jonathan Newman, Blue Robotics Inc.
@@ -26,7 +26,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
--------------------------------*/ 
+-------------------------------*/
 
 #ifndef TSYS01_H_BLUEROBOTICS
 #define TSYS01_H_BLUEROBOTICS
@@ -40,7 +40,15 @@ public:
 
 	void init();
 
-	/** The read from I2C takes up for 40 ms, so use sparingly is possible.
+	/** Should be called before read. Sends a signal to do a temperature reading
+	 * to the unit. This should be followed by a delay of minimum 10ms before
+	 * a read() is called. A read() should always be preceeded by a prepareRead()
+	 */
+	void prepareRead();
+
+	/** The read from I2C takes up for 30 ms??? (no evidence of this), so use sparingly is possible.
+	 * This should always be preceeded by a prepareRead() followed by a minimum of 10ms pause before
+	 * read() is called.
 	 */
 	void read();
 

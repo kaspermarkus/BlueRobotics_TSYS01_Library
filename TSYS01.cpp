@@ -1,7 +1,7 @@
 #include "TSYS01.h"
 #include <Wire.h>
 
-#define TSYS01_ADDR                        0x77  
+#define TSYS01_ADDR                        0x77
 #define TSYS01_RESET                       0x1E
 #define TSYS01_ADC_READ                    0x00
 #define TSYS01_ADC_TEMP_CONV               0x48
@@ -16,9 +16,9 @@ void TSYS01::init() {
 	Wire.beginTransmission(TSYS01_ADDR);
 	Wire.write(TSYS01_RESET);
 	Wire.endTransmission();
-	
+
 	delay(10);
-	
+
 		// Read calibration values
 	for ( uint8_t i = 0 ; i < 8 ; i++ ) {
 		Wire.beginTransmission(TSYS01_ADDR);
@@ -31,14 +31,14 @@ void TSYS01::init() {
 
 }
 
-void TSYS01::read() {
-	
+void TSYS01::prepareRead() {
 	Wire.beginTransmission(TSYS01_ADDR);
 	Wire.write(TSYS01_ADC_TEMP_CONV);
 	Wire.endTransmission();
- 
-	delay(10); // Max conversion time per datasheet
-	
+	// delay(10); // Max conversion time per datasheet
+}
+
+void TSYS01::read() {
 	Wire.beginTransmission(TSYS01_ADDR);
 	Wire.write(TSYS01_ADC_READ);
 	Wire.endTransmission();
@@ -63,16 +63,16 @@ void TSYS01::readTestCase() {
 	C[7] = 0;
 
 	D1 = 9378708.0f;
-	
+
 	adc = D1/256;
 
 	calculate();
 }
 
-void TSYS01::calculate() {	
-	adc = D1/256; 
+void TSYS01::calculate() {
+	adc = D1/256;
 
-TEMP = (-2) * float(C[1]) / 1000000000000000000000.0f * pow(adc,4) + 
+TEMP = (-2) * float(C[1]) / 1000000000000000000000.0f * pow(adc,4) +
         4 * float(C[2]) / 10000000000000000.0f * pow(adc,3) +
 	  (-2) * float(C[3]) / 100000000000.0f * pow(adc,2) +
    	    1 * float(C[4]) / 1000000.0f * adc +
